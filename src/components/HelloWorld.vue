@@ -1,34 +1,71 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+
+    <div class="casino">
+      <h1>Welcome to the Casino</h1>
+      <h4>Please pick a number between 1 and 10</h4>
+      Amount to bet: <input v-model="amount" placeholder="0 Ether">
+      <ul>
+        <li v-on:click="clickNumber">1</li>
+        <li v-on:click="clickNumber">2</li>
+        <li v-on:click="clickNumber">3</li>
+        <li v-on:click="clickNumber">4</li>
+        <li v-on:click="clickNumber">5</li>
+        <li v-on:click="clickNumber">6</li>
+        <li v-on:click="clickNumber">7</li>
+        <li v-on:click="clickNumber">8</li>
+        <li v-on:click="clickNumber">9</li>
+        <li v-on:click="clickNumber">10</li>
+      </ul>
+      <img v-if="pending" id="loader" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif">
+      <div class="event" v-if="winEvent">
+        Won: {{ winEvent._status }}
+        Amount: {{ winEvent._amount }} Wei
+      </div>
+    </div>
+
   </div>
 </template>
+
+<style scoped>
+.casino {
+  margin-top: 50px;
+  text-align:center;
+}
+#loader {
+  width:150px;
+}
+ul {
+  margin: 25px;
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap:25px;
+  grid-row-gap:25px;
+}
+li{
+  padding: 20px;
+  margin-right: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color:#fff;
+  border: -2px solid #bf0d9b;
+  color: #bf0d9b;
+  box-shadow:3px 5px #bf0d9b;
+}
+li:hover{
+  background-color:#bf0d9b;
+  color:white;
+  box-shadow:0px 0px #bf0d9b;
+}
+li:active{
+  opacity: 0.7;
+}
+*{
+  color: #444444;
+}
+</style>
 
 <script>
 export default {
@@ -37,6 +74,46 @@ export default {
     msg: String
   },
   beforeCreate () {
+    console.log('registerWeb3 Action dispatched from helloWorld.vue')
+    this.$store.dispatch('registerWeb3')
+  },
+  mounted () {
+    console.log('dispatching getContractInstance')
+    this.$store.dispatch('getContractInstance')
+  },
+  data () {
+    return {
+      amount: null,
+      pending: false,
+      winEvent: null
+    }
+  },
+  methods: {
+    clickNumber (event) {
+      console.log(event.target.innerHTML, this.amount)
+      this.winEvent = null
+      this.pending = true
+      this.$store.state.contractInstance().bet(event.target.innerHTML, {
+        gas: 300000,
+        value: this.$store.state.web3.web3Instance().toWei(this.amount, 'ether'),
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if (err) {
+          console.log(err)
+          this.pending = false
+        } else {
+          let Won = this.$store.state.contractInstance().Won()
+          Won.watch((err, result) => {
+            if (err) {
+              console.log('could not get event Won()')
+            } else {
+              this.winEvent = result.args
+              this.pending = false
+            }
+          })
+        }
+      })
+    }
   }
 }
 </script>
