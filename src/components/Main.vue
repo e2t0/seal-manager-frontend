@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img class="mb-4 logo" src="/img/logo.png" />
+    <img class="mb-4 logo" src="img/logo.png" />
     <h2>{{ msg }}</h2>
     <div class="row mt-5">
       <div class="col-md">
