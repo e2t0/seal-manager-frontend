@@ -31,7 +31,7 @@ export default {
         result[0].forEach((address) => {
           let activeDelegate = {
             'address': address,
-            'name': web3.toAscii(result[1][i])
+            'name': web3.toUtf8(result[1][i])
           }
           activeDelegates[i] = activeDelegate
           i++
