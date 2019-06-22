@@ -16,7 +16,7 @@ const ABI = [
         "type": "uint256"
       }
     ],
-    "name": "register",
+    "name": "registerDelegate",
     "outputs": [
       {
         "name": "success",
@@ -92,7 +92,7 @@ const ABI = [
         "type": "address"
       }
     ],
-    "name": "revoke",
+    "name": "removeDelegate",
     "outputs": [
       {
         "name": "success",
@@ -101,6 +101,43 @@ const ABI = [
     ],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getActiveDelegates",
+    "outputs": [
+      {
+        "name": "delegeeAddresses",
+        "type": "address[]"
+      },
+      {
+        "name": "delegeeNames",
+        "type": "bytes32[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "delegationList",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -201,7 +238,7 @@ const ABI = [
         "type": "address"
       }
     ],
-    "name": "DelegationRevoked",
+    "name": "DelegationRemoved",
     "type": "event"
   }
 ]

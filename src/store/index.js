@@ -23,6 +23,9 @@ export const store = new Vuex.Store({
       web3Copy.isInjected = result.injectedWeb3
       web3Copy.web3Instance = result.web3
       state.web3 = web3Copy
+    },
+    setActiveDelegates (state, delegates) {
+      state.activeDelegates = delegates
     }
   },
   actions: {
@@ -39,7 +42,31 @@ export const store = new Vuex.Store({
       }).catch(e => {
         console.log('error in action registerWeb3', e)
       })
+    },
+
+    fetchActiveDelegates ({ commit }) {
+      console.log("fetchActiveDelegates 2")
+      let delegates = [];
+      delegates[0] = "0x1";
+      delegates[1] = "0x2";
+      delegates[2] = "0x3";
+      console.log(delegates)
+
+      commit('setActiveDelegates', delegates)
+
+      // this.contract.getActiveDelegates(function(error, result){
+      //   if (err) {
+      //     console.log(err)
+      //   } else {
+      //     console.log(result)
+      //   }
+      // });
     }
 
+  },
+  getters: {
+    activeDelegates: (state) => {
+      return state.activeDelegates
+    }
   }
 })

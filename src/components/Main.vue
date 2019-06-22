@@ -1,8 +1,14 @@
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
-    <DelegationCreate></DelegationCreate>
-    <DelegationList></DelegationList>
+  <div class="container">
+    <h1 class="display-4">{{ msg }}</h1>
+    <div class="row mt-5">
+      <div class="col-md">
+      <DelegationCreate></DelegationCreate>
+      </div>
+      <div class="col-md">
+      <DelegationList></DelegationList>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,7 +44,6 @@ export default {
       winEvent: null
     }
   },
-
   methods: {
     clickNumber (event) {
       console.log(event.target.innerHTML, this.amount)

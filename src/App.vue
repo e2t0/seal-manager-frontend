@@ -1,10 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
-      <div class="row">
-        <Main msg="Seal Management Tool"/>
-      </div>
-    </div>
+    <Main msg="Seal Management Tool"/>
   </div>
 </template>
 

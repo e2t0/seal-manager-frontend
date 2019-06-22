@@ -2,19 +2,21 @@
   <div>
     <form v-on:submit.prevent class="form text-left my-3 px-4 py-2">
       <div class="form-group">
-        <label class="w-25" for="delegation-file-hash">Delegation File Hash</label>
-        <input v-model="delegationFileHash" id="delegation-file-hash" type="text" />
+        <label for="delegation-file-hash">Delegation File Hash *</label>
+        <input  class="form-control" v-model="delegationFileHash" id="delegation-file-hash" type="text" required/>
+        <small class="form-text text-muted">Filehash of the certified document of the delegee</small>
       </div>
       <div class="form-group">
-        <label class="w-25" for="delegee-name">Delegee Name</label>
-        <input v-model="delegeeName" id="delegee-name" type="text" />
+        <label for="delegee-name">Delegee Name *</label>
+        <input  class="form-control" v-model="delegeeName" id="delegee-name" type="text" required/>
         <small class="form-text text-muted">Name of delegee that is shown when someone verifies the authenticity of a document</small>
       </div>
       <div class="form-group">
-        <label class="w-25" for="end-timestamp">End Timestamp</label>
-        <input v-model="endTimestamp" id="end-timestamp" type="text" />
+        <label>End Timestamp *</label>
+        <datepicker v-model="deactivateDate" required></datepicker>
+        <small class="form-text text-muted">Date when to deactivate delegee</small>
       </div>
-      <button v-on:click="addVerifiedIssuer()"
+      <button v-on:click="registerDelegate()"
               class="btn btn-primary">Create
       </button>
     </form>
@@ -22,28 +24,39 @@
 </template>
 <script>
 
+import Datepicker from 'vuejs-datepicker';
+
 export default {
   name: 'Main',
+  components: {
+    Datepicker
+  },
   data () {
     return {
       delegationFileHash: '',
       delegeeName: '',
-      endTimestamp: '',
+      deactivateDate: '',
       sealEvent: null,
       pending: false,
     }
   },
   methods: {
-    addVerifiedIssuer() {
-      console.log("creating with params")
-      console.log(this.delegationFileHash)
-      console.log(this.delegeeName)
-      console.log(this.endTimestamp)
+    registerDelegate() {
+      console.log("alex")
+console.log(typeof this.deactivateDate)
+console.log()
+      if (this.delegationFileHash === '' ||
+        this.delegeeName === '' ||
+        this.delegeeName === '' ||
+        this.deactivateDate  === '') {
+        return
+      }
+      let endTimestamp = this.deactivateDate.getTime();
 
       let that = this
       let delegeeNameBytes = web3.fromAscii(this.delegeeName)
 
-      this.contract.register(this.delegationFileHash, delegeeNameBytes, this.endTimestamp, {value: 0, gas: 210000}, function(err, result){
+      this.contract.registerDelegate(this.delegationFileHash, delegeeNameBytes, endTimestamp, {value: 0, gas: 210000}, function(err, result){
         if (err) {
           console.log(err)
         } else {
