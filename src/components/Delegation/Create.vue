@@ -42,17 +42,14 @@ export default {
   },
   methods: {
     registerDelegate() {
-      console.log("alex")
-console.log(typeof this.deactivateDate)
-console.log()
       if (this.delegationFileHash === '' ||
         this.delegeeName === '' ||
         this.delegeeName === '' ||
         this.deactivateDate  === '') {
         return
       }
-      let endTimestamp = this.deactivateDate.getTime();
 
+      let endTimestamp = this.deactivateDate.getTime();
       let that = this
       let delegeeNameBytes = web3.fromAscii(this.delegeeName)
 
