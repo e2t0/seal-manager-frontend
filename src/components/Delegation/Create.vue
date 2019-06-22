@@ -12,9 +12,9 @@
         <small class="form-text text-muted">Name of delegee that is shown when someone verifies the authenticity of a document</small>
       </div>
       <div class="form-group">
-        <label>End Timestamp *</label>
-        <datepicker input-class="datepicker form-control w-50" v-model="deactivateDate" required></datepicker>
-        <small class="form-text text-muted">Date when to deactivate delegee</small>
+        <label>Revokation date</label>
+        <datepicker input-class="datepicker form-control w-50" v-model="deactivateDate"></datepicker>
+        <small class="form-text text-muted">Date when to deactivate delegee. If left empty there is no automatic revocation.</small>
       </div>
       <button v-on:click="registerDelegate()"
               class="btn btn-primary">Create
@@ -50,23 +50,26 @@ export default {
   methods: {
     registerDelegate() {
       if (this.delegationFileHash === '' ||
-        this.delegeeName === '' ||
-        this.deactivateDate  === '') {
+        this.delegeeName === '') {
         return
       }
 
-      let endTimestamp = this.deactivateDate.getTime();
+      let endTimestamp = 0
+      if (this.deactivateDate !== '') {
+        endTimestamp = this.deactivateDate.getTime();
+      }
       let delegeeNameBytes = web3.fromAscii(this.delegeeName)
-
-      this.delegationFileHash = ''
-      this.delegeeName = ''
-      this.deactivateDate = ''
 
       this.contract.registerDelegate(this.delegationFileHash, delegeeNameBytes, endTimestamp, {value: 0, gas: 210000}, function(err){
         if (err) {
           console.log(err)
         }
       });
+
+      this.delegationFileHash = ''
+      this.delegeeName = ''
+      this.deactivateDate = ''
+
     }
   },
   computed: {
