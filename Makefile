@@ -8,6 +8,7 @@ all: clean build
 
 init:
 	npm install
+	npm install -D sass-loader sass
 
 build:
 	npm run build

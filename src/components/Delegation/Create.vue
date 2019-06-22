@@ -1,13 +1,13 @@
 <template>
   <div>
-    <verification-drop-box @fileDropped="verify"/> 
+    <verification-drop-box @filesDropped="verify"/> 
     <form v-on:submit.prevent class="form text-left my-3 px-4 py-2">
-      <div class="form-group">HELLO {{foobar}} FOOBAR
-        <label for="delegation-file-hash">Delegation File Hash *</label>
-        <input  class="form-control" v-model="delegationFileHash" id="delegation-file-hash" type="text" required/>
+      <div class="form-group">
+        <label for="delegation-file-hash">Delegation File Hash</label>
+        <input  class="form-control" v-model="delegationFileHash" id="delegation-file-hash" type="text" readonly/>
         <small class="form-text text-muted">Filehash of the certified document of the delegee</small>
       </div>
-      <div class="form-group">HELLO {{delegeeName}} FOOBAR
+      <div class="form-group">
         <label for="delegee-name">Delegee Name *</label>
         <input maxlength="32" class="form-control" v-model="delegeeName" id="delegee-name" type="text" required/>
         <small class="form-text text-muted">Name of delegee that is shown when someone verifies the authenticity of a document</small>
@@ -35,7 +35,7 @@
 import Datepicker from 'vuejs-datepicker';
 import '../../assets/styles/styles.scss'
 import VerificationDropBox from './VerificationDropBox.vue'
-import hashingService from '../../lib/hashing-service.js'
+import { keccak256 } from 'js-sha3'
 
 export default {
   name: 'Main',
@@ -51,7 +51,6 @@ export default {
       deactivateDate: '',
       sealEvent: null,
       pending: false,
-      verificationItems: [],
     }
   },
   methods: {
@@ -79,17 +78,16 @@ export default {
 
     },
     async verify (files) {
-      this.verificationItems = []
       try {
         for (const file of files) {
-          this.verificationItems.push({file, name: file.name})
+            let reader = new FileReader()
+            let hash = ''
+            reader.onload = () => {
+                this.delegationFileHash= '0x' + keccak256(reader.result)
+            }
+            reader.readAsArrayBuffer(file)
         }
 
-        this.verificationItems.forEach(async (item, i) => {
-          const hash = await hashingService.hashFile(item.file)
-          Vue.set(this.foobar, hash)
-          console.log(hash)
-        })
       } catch (e) {
         console.log(e)
       }

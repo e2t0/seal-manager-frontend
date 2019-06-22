@@ -21,7 +21,7 @@ export default {
     pollActiveDelegates () {
       this.polling = setInterval(() => {
         this.getActiveDelegates()
-      }, 200000)
+      }, 2000)
     },
     getActiveDelegates() {
       let that = this
