@@ -5,8 +5,9 @@ let state = {
     networkId: null,
     coinbase: null,
     balance: null,
-    error: null
+    error: null,
   },
+  activeDelegates: [],
   contractInstance: null
 }
 export default state

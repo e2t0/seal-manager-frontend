@@ -2,7 +2,7 @@
   <div class="pt-5 col-md">
     <h3>Active Delegees</h3>
     <ul class="list-group-flush pt-2">
-      <li class="list-group-item" v-for="delegatePubKey in getActiveDelegates()">
+      <li class="list-group-item" v-for="delegatePubKey in activeDelegates">
           Heisenberg <button @click="removeDelegate(delegatePubKey)" type="button" class="btn btn-link">Revoke</button>
       </li>
     </ul>
@@ -12,21 +12,20 @@
 
 export default {
   name: 'Main',
+  data () {
+    return {
+      polling: null
+    }
+  },
   methods: {
+    pollActiveDelegates () {
+      this.polling = setInterval(() => {
+        this.getActiveDelegates()
+      }, 3000)
+    },
     getActiveDelegates() {
-      let persons = [];
-      persons[0] = "0x1";
-      persons[1] = "0x2";
-      persons[2] = "0x3";
-      console.log(persons)
-      return persons
-      // this.contract.getActiveDelegates(function(error, result){
-      //   if (err) {
-      //     console.log(err)
-      //   } else {
-      //     console.log(result)
-      //   }
-      // });
+      console.log("getActiveDelegates 1")
+      this.$store.dispatch('fetchActiveDelegates')
     },
     removeDelegate(pubKey) {
       console.log('removeDelegate: ', pubKey)
@@ -49,9 +48,21 @@ export default {
     }
   },
   computed: {
+    activeDelegates () {
+      return this.$store.getters.activeDelegates
+    },
     contract () {
       return this.$store.state.contractInstance()
     }
+  },
+  beforeDestroy () {
+    clearInterval(this.polling)
+  },
+  created () {
+
+    this.getActiveDelegates() //load on active delegates on component create
+
+    this.pollActiveDelegates()
   }
 }
 
