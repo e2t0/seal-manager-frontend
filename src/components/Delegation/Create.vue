@@ -1,9 +1,10 @@
 <template>
   <div>
+    <verification-drop-box @filesDropped="verify"/> 
     <form v-on:submit.prevent class="form text-left my-3 px-4 py-2">
       <div class="form-group">
-        <label for="delegation-file-hash">Delegation File Hash *</label>
-        <input  class="form-control" v-model="delegationFileHash" id="delegation-file-hash" type="text" required/>
+        <label for="delegation-file-hash">Delegation File Hash</label>
+        <input  class="form-control" v-model="delegationFileHash" id="delegation-file-hash" type="text" readonly/>
         <small class="form-text text-muted">Filehash of the certified document of the delegee</small>
       </div>
       <div class="form-group">
@@ -32,15 +33,20 @@
 <script>
 
 import Datepicker from 'vuejs-datepicker';
+import '../../assets/styles/styles.scss'
+import VerificationDropBox from './VerificationDropBox.vue'
+import { keccak256 } from 'js-sha3'
 
 export default {
   name: 'Main',
   components: {
-    Datepicker
+    Datepicker,
+    VerificationDropBox
   },
   data () {
     return {
       delegationFileHash: '',
+      foobar:'',
       delegeeName: '',
       deactivateDate: '',
       sealEvent: null,
@@ -70,7 +76,22 @@ export default {
       this.delegeeName = ''
       this.deactivateDate = ''
 
-    }
+    },
+    async verify (files) {
+      try {
+        for (const file of files) {
+            let reader = new FileReader()
+            let hash = ''
+            reader.onload = () => {
+                this.delegationFileHash= '0x' + keccak256(reader.result)
+            }
+            reader.readAsArrayBuffer(file)
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    },
   },
   computed: {
     contract () {
