@@ -14,7 +14,7 @@
         <label class="w-25" for="end-timestamp">End Timestamp</label>
         <input v-model="endTimestamp" id="end-timestamp" type="text" />
       </div>
-      <button v-on:click="addVerifiedIssuer()"
+      <button v-on:click="registerDelegate()"
               class="btn btn-primary">Create
       </button>
     </form>
@@ -34,7 +34,7 @@ export default {
     }
   },
   methods: {
-    addVerifiedIssuer() {
+    registerDelegate() {
       console.log("creating with params")
       console.log(this.delegationFileHash)
       console.log(this.delegeeName)
@@ -43,7 +43,7 @@ export default {
       let that = this
       let delegeeNameBytes = web3.fromAscii(this.delegeeName)
 
-      this.contract.register(this.delegationFileHash, delegeeNameBytes, this.endTimestamp, {value: 0, gas: 210000}, function(err, result){
+      this.contract.registerDelegate(this.delegationFileHash, delegeeNameBytes, this.endTimestamp, {value: 0, gas: 210000}, function(err, result){
         if (err) {
           console.log(err)
         } else {
