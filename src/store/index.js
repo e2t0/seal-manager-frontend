@@ -10,7 +10,7 @@ export const store = new Vuex.Store({
   state,
   mutations: {
     registerContractInstance (state, payload) {
-      console.log('Casino contract instance: ', payload)
+      console.log('contract instance: ', payload)
       state.contractInstance = () => payload
     },
     registerWeb3Instance (state, payload) {

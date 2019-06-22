@@ -1,5 +1,32 @@
-const address = '0xe09b4863421808ec6de1c4377574297ab8954987'
+const address = '0x1d2e1134f5b0be738265718328617ecbd7a249bb'
 const ABI = [
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_delegationHash",
+        "type": "bytes32"
+      },
+      {
+        "name": "_delegeeName",
+        "type": "bytes32"
+      },
+      {
+        "name": "_endtimestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "register",
+    "outputs": [
+      {
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
   {
     "constant": false,
     "inputs": [
@@ -66,33 +93,6 @@ const ABI = [
       }
     ],
     "name": "revoke",
-    "outputs": [
-      {
-        "name": "success",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_delegationHash",
-        "type": "bytes32"
-      },
-      {
-        "name": "_delegeeName",
-        "type": "string"
-      },
-      {
-        "name": "_endtimestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "register",
     "outputs": [
       {
         "name": "success",
@@ -182,6 +182,11 @@ const ABI = [
         "indexed": true,
         "name": "delegee",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "delegationdochash",
+        "type": "bytes32"
       }
     ],
     "name": "DelegationAdded",
@@ -194,11 +199,6 @@ const ABI = [
         "indexed": true,
         "name": "delegee",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "end",
-        "type": "uint256"
       }
     ],
     "name": "DelegationRevoked",

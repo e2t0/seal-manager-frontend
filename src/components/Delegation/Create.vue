@@ -44,7 +44,6 @@ export default {
       let delegeeNameBytes = web3.fromAscii(this.delegeeName)
 
       this.contract.register(this.delegationFileHash, delegeeNameBytes, this.endTimestamp, {value: 0, gas: 210000}, function(err, result){
-      // this.$store.state.contractInstance().register(this.delegationFileHash, this.delegeeName, this.endTimestamp, {value: 0, gas: 2000}, function(err, result){
         if (err) {
           console.log(err)
         } else {
@@ -53,6 +52,7 @@ export default {
               if (err) {
                 console.log('could not get event SealAdminAdded()')
               } else {
+                console.log("watch SealAdminAdded")
                 this.sealEvent = result.args
                 this.pending = false
               }

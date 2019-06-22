@@ -6,6 +6,7 @@ let getContract = new Promise(function (resolve, reject) {
   let delegationContract = web3.eth.contract(ABI)
 
   // delegationContract.eth.defaultAccount = web3.eth.coinbase
+  console.log("account: ", web3.eth.accounts[0])
   delegationContract.eth.defaultAccount = web3.eth.accounts[0]
   // web3.eth.personal.unlockAccount(web3.eth.defaultAccount)
 
