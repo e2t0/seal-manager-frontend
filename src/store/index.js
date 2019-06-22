@@ -45,12 +45,10 @@ export const store = new Vuex.Store({
     },
 
     fetchActiveDelegates ({ commit }) {
-      console.log("fetchActiveDelegates 2")
       let delegates = [];
       delegates[0] = "0x1";
       delegates[1] = "0x2";
       delegates[2] = "0x3";
-      console.log(delegates)
 
       commit('setActiveDelegates', delegates)
 

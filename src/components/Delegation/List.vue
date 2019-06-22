@@ -24,7 +24,6 @@ export default {
       }, 3000)
     },
     getActiveDelegates() {
-      console.log("getActiveDelegates 1")
       this.$store.dispatch('fetchActiveDelegates')
     },
     removeDelegate(pubKey) {
