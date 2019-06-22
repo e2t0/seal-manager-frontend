@@ -8,7 +8,7 @@
       </div>
       <div class="form-group">
         <label for="delegee-name">Delegee Name *</label>
-        <input  class="form-control" v-model="delegeeName" id="delegee-name" type="text" required/>
+        <input maxlength="32" class="form-control" v-model="delegeeName" id="delegee-name" type="text" required/>
         <small class="form-text text-muted">Name of delegee that is shown when someone verifies the authenticity of a document</small>
       </div>
       <div class="form-group">
@@ -51,16 +51,18 @@ export default {
     registerDelegate() {
       if (this.delegationFileHash === '' ||
         this.delegeeName === '' ||
-        this.delegeeName === '' ||
         this.deactivateDate  === '') {
         return
       }
 
       let endTimestamp = this.deactivateDate.getTime();
-      let that = this
       let delegeeNameBytes = web3.fromAscii(this.delegeeName)
 
-      this.contract.registerDelegate(this.delegationFileHash, delegeeNameBytes, endTimestamp, {value: 0, gas: 210000}, function(err, result){
+      this.delegationFileHash = ''
+      this.delegeeName = ''
+      this.deactivateDate = ''
+
+      this.contract.registerDelegate(this.delegationFileHash, delegeeNameBytes, endTimestamp, {value: 0, gas: 210000}, function(err){
         if (err) {
           console.log(err)
         }
