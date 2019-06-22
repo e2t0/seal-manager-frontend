@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <h1>{{ msg }}</h1>
-    <div class="row">
-      <div class="col-sm">
+    <h1 class="display-4">{{ msg }}</h1>
+    <div class="row mt-5">
+      <div class="col-md">
       <DelegationCreate></DelegationCreate>
       </div>
-      <div class="col-sm">
+      <div class="col-md">
       <DelegationList></DelegationList>
       </div>
     </div>

@@ -1,8 +1,8 @@
 <template>
   <div class="pt-5 col-md">
-    <h3>Delegees</h3>
-    <ul class="pt-2">
-      <li v-for="delegatePubKey in getActiveDelegates()">
+    <h3>Active Delegees</h3>
+    <ul class="list-group-flush pt-2">
+      <li class="list-group-item" v-for="delegatePubKey in getActiveDelegates()">
           Heisenberg <button @click="removeDelegate(delegatePubKey)" type="button" class="btn btn-link">Revoke</button>
       </li>
     </ul>
