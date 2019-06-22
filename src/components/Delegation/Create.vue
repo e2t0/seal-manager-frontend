@@ -1,13 +1,13 @@
 <template>
   <div>
-    <verification-drop-box @fileDropped="verify" @drop="drop"/> 
+    <verification-drop-box @fileDropped="verify"/> 
     <form v-on:submit.prevent class="form text-left my-3 px-4 py-2">
-      <div class="form-group">
+      <div class="form-group">HELLO {{foobar}} FOOBAR
         <label for="delegation-file-hash">Delegation File Hash *</label>
         <input  class="form-control" v-model="delegationFileHash" id="delegation-file-hash" type="text" required/>
         <small class="form-text text-muted">Filehash of the certified document of the delegee</small>
       </div>
-      <div class="form-group">
+      <div class="form-group">HELLO {{delegeeName}} FOOBAR
         <label for="delegee-name">Delegee Name *</label>
         <input maxlength="32" class="form-control" v-model="delegeeName" id="delegee-name" type="text" required/>
         <small class="form-text text-muted">Name of delegee that is shown when someone verifies the authenticity of a document</small>
@@ -35,6 +35,7 @@
 import Datepicker from 'vuejs-datepicker';
 import '../../assets/styles/styles.scss'
 import VerificationDropBox from './VerificationDropBox.vue'
+import hashingService from '../../lib/hashing-service.js'
 
 export default {
   name: 'Main',
@@ -45,10 +46,12 @@ export default {
   data () {
     return {
       delegationFileHash: '',
+      foobar:'',
       delegeeName: '',
       deactivateDate: '',
       sealEvent: null,
       pending: false,
+      verificationItems: [],
     }
   },
   methods: {
@@ -82,45 +85,13 @@ export default {
           this.verificationItems.push({file, name: file.name})
         }
 
-        VueScrollTo.scrollTo(this.$refs.results, 400)
-
         this.verificationItems.forEach(async (item, i) => {
           const hash = await hashingService.hashFile(item.file)
-          const verification = await client.verifyFile(hash)
-          Vue.set(this.verificationItems, i, {...this.verificationItems[i], hash, ...verification})
-
-          if (verification.issuer !== null) {
-            let [registrationEvent, registrationBlock] = await Promise.all(
-              [client.getRegistrationEvent(hash), client.getRegistrationTxBlock(hash)],
-            )
-
-            Vue.set(this.verificationItems, i, {...this.verificationItems[i], registrationEvent, registrationBlock})
-
-            if (verification.revoked === true) {
-              let [revocationEvent, revocationBlock] = await Promise.all(
-                [client.getRevocationEvent(hash), client.getRevocationTxBlock(hash)],
-              )
-              Vue.set(this.verificationItems, i, {...this.verificationItems[i], revocationEvent, revocationBlock})
-            }
-          }
-
-          Vue.set(this.verificationItems[i], 'loaded', true)
+          Vue.set(this.foobar, hash)
+          console.log(hash)
         })
       } catch (e) {
         console.log(e)
-      }
-    },
-    drop () {
-      if (this.draggingDemoDoc) {
-        switch (this.draggingDemoDoc) {
-          case 'verified':
-            this.demoVerified()
-            break
-          case 'unverified':
-            this.demoUnverified()
-            break
-        }
-
       }
     },
   },
