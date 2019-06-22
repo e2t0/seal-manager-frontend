@@ -13,7 +13,7 @@
         <small class="form-text text-muted">Name of delegee that is shown when someone verifies the authenticity of a document</small>
       </div>
       <div class="form-group">
-        <label>Revokation date</label>
+        <label>Revocation date</label>
         <datepicker input-class="datepicker form-control w-50" v-model="deactivateDate"></datepicker>
         <small class="form-text text-muted">Date when to deactivate delegee. If left empty there is no automatic revocation.</small>
       </div>
