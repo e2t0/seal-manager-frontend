@@ -1,5 +1,6 @@
 <template>
   <div>
+    <verification-drop-box @fileDropped="verify" @drop="drop"/> 
     <form v-on:submit.prevent class="form text-left my-3 px-4 py-2">
       <div class="form-group">
         <label for="delegation-file-hash">Delegation File Hash *</label>
@@ -32,11 +33,14 @@
 <script>
 
 import Datepicker from 'vuejs-datepicker';
+import '../../assets/styles/styles.scss'
+import VerificationDropBox from './VerificationDropBox.vue'
 
 export default {
   name: 'Main',
   components: {
-    Datepicker
+    Datepicker,
+    VerificationDropBox
   },
   data () {
     return {
@@ -70,7 +74,55 @@ export default {
       this.delegeeName = ''
       this.deactivateDate = ''
 
-    }
+    },
+    async verify (files) {
+      this.verificationItems = []
+      try {
+        for (const file of files) {
+          this.verificationItems.push({file, name: file.name})
+        }
+
+        VueScrollTo.scrollTo(this.$refs.results, 400)
+
+        this.verificationItems.forEach(async (item, i) => {
+          const hash = await hashingService.hashFile(item.file)
+          const verification = await client.verifyFile(hash)
+          Vue.set(this.verificationItems, i, {...this.verificationItems[i], hash, ...verification})
+
+          if (verification.issuer !== null) {
+            let [registrationEvent, registrationBlock] = await Promise.all(
+              [client.getRegistrationEvent(hash), client.getRegistrationTxBlock(hash)],
+            )
+
+            Vue.set(this.verificationItems, i, {...this.verificationItems[i], registrationEvent, registrationBlock})
+
+            if (verification.revoked === true) {
+              let [revocationEvent, revocationBlock] = await Promise.all(
+                [client.getRevocationEvent(hash), client.getRevocationTxBlock(hash)],
+              )
+              Vue.set(this.verificationItems, i, {...this.verificationItems[i], revocationEvent, revocationBlock})
+            }
+          }
+
+          Vue.set(this.verificationItems[i], 'loaded', true)
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    drop () {
+      if (this.draggingDemoDoc) {
+        switch (this.draggingDemoDoc) {
+          case 'verified':
+            this.demoVerified()
+            break
+          case 'unverified':
+            this.demoUnverified()
+            break
+        }
+
+      }
+    },
   },
   computed: {
     contract () {
