@@ -56,17 +56,6 @@ export default {
       this.contract.registerDelegate(this.delegationFileHash, delegeeNameBytes, endTimestamp, {value: 0, gas: 210000}, function(err, result){
         if (err) {
           console.log(err)
-        } else {
-          let SealAdminAdded = that.$store.state.contractInstance().SealAdminAdded()
-            SealAdminAdded.watch((err, result) => {
-              if (err) {
-                console.log('could not get event SealAdminAdded()')
-              } else {
-                console.log("watch SealAdminAdded")
-                this.sealEvent = result.args
-                this.pending = false
-              }
-            })
         }
       });
     }
