@@ -44,21 +44,8 @@ export const store = new Vuex.Store({
       })
     },
 
-    fetchActiveDelegates ({ commit }) {
-      let delegates = [];
-      delegates[0] = "0x1";
-      delegates[1] = "0x2";
-      delegates[2] = "0x3";
-
+    setActiveDelegates ({ commit }, delegates) {
       commit('setActiveDelegates', delegates)
-
-      // this.contract.getActiveDelegates(function(error, result){
-      //   if (err) {
-      //     console.log(err)
-      //   } else {
-      //     console.log(result)
-      //   }
-      // });
     }
 
   },
