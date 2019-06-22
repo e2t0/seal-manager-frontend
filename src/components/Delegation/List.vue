@@ -40,8 +40,7 @@ export default {
       })
     },
     removeDelegate(pubKey) {
-      console.log('removeDelegate: ', pubKey)
-      this.contract.removeDelegate(pubKey, {value: 0, gas: 210000}, function(err, result){
+      this.contract.removeDelegate(pubKey, {value: 0, gas: 210000}, function(err){
         if (err) {
           console.log(err)
         }
