@@ -1,8 +1,11 @@
 const path = require('path')
 
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/seal/'
+  : '/',
   assetsDir: 'static/',
-  outputDir: path.resolve(__dirname, '../dist'),
+  outputDir: path.resolve(__dirname, 'dist'),
   runtimeCompiler: true,
   productionSourceMap: false,
   pages: {
