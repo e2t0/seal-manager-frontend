@@ -13,7 +13,7 @@
       </div>
       <div class="form-group">
         <label>End Timestamp *</label>
-        <datepicker v-model="deactivateDate" required></datepicker>
+        <datepicker input-class="datepicker form-control w-50" v-model="deactivateDate" required></datepicker>
         <small class="form-text text-muted">Date when to deactivate delegee</small>
       </div>
       <button v-on:click="registerDelegate()"
@@ -22,6 +22,13 @@
     </form>
   </div>
 </template>
+
+<style>
+  .datepicker.form-control[readonly] {
+    background-color: white;
+  }
+</style>
+
 <script>
 
 import Datepicker from 'vuejs-datepicker';
