@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <h1 class="display-4">{{ msg }}</h1>
+    <img class="mb-4 logo" src="/img/logo.png" />
+    <h2>{{ msg }}</h2>
     <div class="row mt-5">
       <div class="col-md">
       <DelegationCreate></DelegationCreate>
@@ -89,5 +90,11 @@ li {
 }
 a {
   color: #42b983;
+}
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 15.7%;
 }
 </style>
