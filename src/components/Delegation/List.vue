@@ -1,7 +1,7 @@
 <template>
-  <div class="pt-5 col-md">
-    <h3>Active Delegees</h3>
-    <ul class="list-group-flush pt-2">
+  <div class="col-md">
+    <h3 class="pd-4">Active Delegees</h3>
+    <ul class="list-group-flush pt-5">
       <li class="list-group-item" v-for="delegate in activeDelegates">
         {{delegate.name}} <button @click="removeDelegate(delegate.address)" type="button" class="btn btn-link">Revoke</button>
       </li>

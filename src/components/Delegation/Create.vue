@@ -1,6 +1,7 @@
 <template>
   <div>
-    <verification-drop-box @filesDropped="verify"/> 
+    <h3>Add Delegee</h3>
+    <verification-drop-box class="mt-5" @filesDropped="verify"/>
     <form v-on:submit.prevent class="form text-left my-3 px-4 py-2">
       <div class="form-group">
         <label for="delegation-file-hash">Delegation File Hash</label>
