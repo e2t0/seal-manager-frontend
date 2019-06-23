@@ -19,6 +19,29 @@ contract EternalDelegateStorage is IEternalDelegateStorage {
     mapping(address => bool) internal sealAdmins;
 
     constructor() public {
+        permitAddress(msg.sender);
+
+        //------ Demo inital state
+        //SealContract
+        permitAddress(0x0575Aaa361c1f3B9C15f6A480728c9A1F5247C84);
+
+        //Seal Administrator #1
+        //Public Key: 0xe4f2604bc8300004aa4477af5f2AdBd37765F3F7
+        //Private Key: 5D9129D9F8658277AC084DB2A7A6D1D7DDE7F971AC43070BDA753D444E4B43F6
+        addSealAdmin(0xe4f2604bc8300004aa4477af5f2AdBd37765F3F7);
+
+        //Seal Administrator #2
+        //Public Key: 0xDEE5470EbbD4eddc6DE45F6022c2347Ef25b82a1
+        //Private Key: 482A14741AB87F6ACF00A4BC6549FEE2B72825A579A36E5A7F27D89F5618D129
+        addSealAdmin(0xDEE5470EbbD4eddc6DE45F6022c2347Ef25b82a1);
+
+        Delegation storage delegation = delegations[0xF0B85dcdA336Ebf9bAdaBA93eEA9a6a62ec10877];
+        delegation.delegeeAddress=0xF0B85dcdA336Ebf9bAdaBA93eEA9a6a62ec10877;
+        delegation.delegeeName="Irina McNamara";
+        delegation.startTimestamps.push(1561204800); //2018
+        delegation.endTimestamps.push(1561247400); //9pm UTC
+        delegation.startTimestamps.push(1561251284); //2018
+        delegationList.push(0xF0B85dcdA336Ebf9bAdaBA93eEA9a6a62ec10877);
     }
 
     // List of contract addresses allowed to call this contract
@@ -82,7 +105,8 @@ contract EternalDelegateStorage is IEternalDelegateStorage {
         for (uint i = 0; i < delegationListSize; i++) {
             Delegation storage delegation = delegations[delegationList[i]];
             uint256 endTimestamps = delegation.endTimestamps.length;
-            if (endTimestamps == 0 || delegation.endTimestamps[endTimestamps-1] == uint(0) || delegation.endTimestamps[endTimestamps-1] > now){
+            uint256 startTimestamps = delegation.startTimestamps.length;
+            if (endTimestamps < startTimestamps || delegation.endTimestamps[startTimestamps-1] == uint(0) || delegation.endTimestamps[startTimestamps-1] > now){
                 delegeeAddresses[activeCount] = delegation.delegeeAddress;
                 delegeeNames[activeCount] = delegation.delegeeName;
                 activeCount++;
