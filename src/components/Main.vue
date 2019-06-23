@@ -2,6 +2,12 @@
   <div class="container">
     <img class="mb-4 logo" src="img/logo.png" />
     <h2>{{ msg }}</h2>
+    <div v-if="installMetamask" id="install-metamask" class=" mt-3 mt-3 alert alert-warning" role="alert">
+     Metamask not found. Please install and login to your account on the ropsten testnet.
+    </div>
+    <div v-if="loginMetamask" id="login-metamask" class=" mt-3 mt-3 alert alert-warning" role="alert">
+      No logged in account found in Metamask. Please login to your metamask account.<br/>If the problem persists consider closing and opening the browser or try with another browser.
+    </div>
     <div class="row mt-5">
       <div class="col-md">
       <DelegationCreate></DelegationCreate>
@@ -27,14 +33,46 @@ export default {
     DelegationCreate,
     DelegationList
   },
+  data () {
+    return {
+      polling: null,
+      installMetamask: false,
+      loginMetamask: false
+    }
+  },
   props: {
     msg: String
+  },
+  methods: {
+
+    checkMetamaskInterval() {
+      this.polling = setInterval(() => {
+        this.checkMetamask()
+      }, 2000)
+    },
+
+    checkMetamask() {
+      if (typeof web3 === 'undefined') {
+        this.installMetamask = true
+      } else {
+        this.installMetamask = false
+
+        if(typeof web3.eth.accounts[0] === 'undefined') {
+          this.loginMetamask = true
+        } else {
+          this.loginMetamask = false
+        }
+
+      }
+    }
+
   },
   beforeCreate () {
     this.$store.dispatch('registerWeb3')
   },
   mounted () {
     this.$store.dispatch('getContractInstance')
+    this.checkMetamaskInterval()
   }
 }
 </script>
