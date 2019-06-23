@@ -93,8 +93,15 @@ contract EternalDelegateStorage is IEternalDelegateStorage {
         Delegation storage delegation = delegations[_delegeeAddress];
         uint256 numDelegations = delegation.startTimestamps.length;
         uint256 endTimestamps = delegation.endTimestamps.length;
-        require(numDelegations > endTimestamps || delegation.endTimestamps[endTimestamps-1] > now, "Not possible to revoke non-existing or already revoked delegation");
-        delegation.endTimestamps.push(_endtimestamp);
+        if (numDelegations > endTimestamps) {
+            if (_endtimestamp == uint(0)) {
+                _endtimestamp=now;
+            }
+            delegation.endTimestamps.push(_endtimestamp);
+        }
+        if (delegation.endTimestamps[endTimestamps-1] > now) {
+            delegation.endTimestamps[endTimestamps-1] = now;
+        }
     }
 
     function getActiveDelegations() public view returns(address[] memory _delegeeAddress, bytes32[] memory _delegeeName) {
