@@ -17,24 +17,24 @@ contract EternalDelegateStorage is IEternalDelegateStorage {
     address[] internal delegationList;
 
     mapping(address => bool) internal sealAdmins;
-
+    
     constructor() public {
+        
+        //------ Demo
         permitAddress(msg.sender);
-
-        //------ Demo inital state
         //SealContract
         permitAddress(0x0575Aaa361c1f3B9C15f6A480728c9A1F5247C84);
-
+        
         //Seal Administrator #1
         //Public Key: 0xe4f2604bc8300004aa4477af5f2AdBd37765F3F7
         //Private Key: 5D9129D9F8658277AC084DB2A7A6D1D7DDE7F971AC43070BDA753D444E4B43F6
         addSealAdmin(0xe4f2604bc8300004aa4477af5f2AdBd37765F3F7);
-
+        
         //Seal Administrator #2
         //Public Key: 0xDEE5470EbbD4eddc6DE45F6022c2347Ef25b82a1
         //Private Key: 482A14741AB87F6ACF00A4BC6549FEE2B72825A579A36E5A7F27D89F5618D129
         addSealAdmin(0xDEE5470EbbD4eddc6DE45F6022c2347Ef25b82a1);
-
+        
         Delegation storage delegation = delegations[0xF0B85dcdA336Ebf9bAdaBA93eEA9a6a62ec10877];
         delegation.delegeeAddress=0xF0B85dcdA336Ebf9bAdaBA93eEA9a6a62ec10877;
         delegation.delegeeName="Irina McNamara";
@@ -93,7 +93,7 @@ contract EternalDelegateStorage is IEternalDelegateStorage {
         Delegation storage delegation = delegations[_delegeeAddress];
         uint256 numDelegations = delegation.startTimestamps.length;
         uint256 endTimestamps = delegation.endTimestamps.length;
-        require(numDelegations > 0 &&  (endTimestamps==0 || delegation.endTimestamps[numDelegations-1] == uint(0) || delegation.endTimestamps[numDelegations-1] > now), "Not possible to revoke non-existing or already revoked delegation");
+        require(numDelegations > endTimestamps || delegation.endTimestamps[endTimestamps-1] > now, "Not possible to revoke non-existing or already revoked delegation");
         delegation.endTimestamps.push(_endtimestamp);
     }
 
